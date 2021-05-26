@@ -1,0 +1,12 @@
+GET http://0.0.0.0:5000/
+Host: www.dal.ca
+
+###
+
+GET http://0.0.0.0:5000/
+Host: www.apple.ca
+
+###
+
+GET http://0.0.0.0:5000/
+Host: www.xyz.com
