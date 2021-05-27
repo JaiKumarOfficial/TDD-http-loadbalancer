@@ -1,12 +1,25 @@
 GET http://0.0.0.0:5000/
 Host: www.dal.ca
 
-###
 
+###
 GET http://0.0.0.0:5000/
 Host: www.apple.ca
 
 ###
-
 GET http://0.0.0.0:5000/
 Host: www.xyz.com
+
+// Path Based req
+###
+GET http://0.0.0.0:5000/staff
+
+###
+GET http://0.0.0.0:5000/student
+
+###
+GET http://0.0.0.0:5000/error
+
+###
+GET http://0.0.0.0:8081/
+

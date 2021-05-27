@@ -27,12 +27,12 @@ def test_host_routing_notfound(client):
 
 def test_path_routing_staff(client):
     result = client.get("/staff")
-    assert b"This is the staff application." in result.data
+    assert b"This is the staff application" in result.data
 
 
 def test_path_routing_srudent(client):
     result = client.get("/student")
-    assert b"This is the student application." in result.data
+    assert b"This is the student application" in result.data
 
 
 def test_path_routing_notfound(client):
