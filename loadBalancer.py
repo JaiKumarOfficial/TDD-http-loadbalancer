@@ -1,8 +1,15 @@
 from flask import Flask, request
 import requests, random
+from utils import (
+    get_server_list,
+    convert_obj_server_list,
+    check_server_health,
+    fetch_healthy_server,
+)
 
 
 loadbalancer = Flask(__name__)
+
 
 ######## Handle test REQUESTS #######
 
@@ -26,6 +33,7 @@ def path_router(path):
     return "Not Found", 404
 
 
+# ---------- PHASE 2 ---------#
 ######## Load Balance incoming REQUESTS #######
 
 # Pool of backend servers
@@ -54,6 +62,51 @@ def path_router(path):
     elif path == "staff":
         response = requests.get("http://%s" % random.choice(apple_servers))
         return response.content
+    return "Not Found", 404
+
+
+# ---------- PHASE 3 ---------#
+######## Load Balance incoming REQUESTS via picking healthy server from given server list #######
+
+server_dict = get_server_list("server.json")
+server_obj_list = convert_obj_server_list(server_dict)
+
+# ------ Host Based REQUEST ------#
+@loadbalancer.route("/")
+def router():
+    updated_server_obj_list = check_server_health(server_obj_list)
+    host_header = request.headers["Host"]
+    if host_header == "www.dal.ca":
+        healthy_server = fetch_healthy_server(updated_server_obj_list, host_header)
+        if healthy_server:
+            response = requests.get("http://%s" % healthy_server.endpoint)
+            return response.content
+        return "No Healthy Backend server available"
+    elif host_header == "www.apple.ca":
+        healthy_server = fetch_healthy_server(updated_server_obj_list, host_header)
+        if healthy_server:
+            response = requests.get("http://%s" % healthy_server.endpoint)
+            return response.content
+        return "No Healthy Backend server available"
+    return "Not Found", 404
+
+
+# ------ Path Based REQUEST ------#
+@loadbalancer.route("/<path>")
+def path_router(path):
+    updated_server_obj_list = check_server_health(server_obj_list)
+    if path == "student":
+        healthy_server = fetch_healthy_server(updated_server_obj_list, "/" + path)
+        if healthy_server:
+            response = requests.get("http://%s" % healthy_server.endpoint)
+            return response.content
+        return "No Healthy Backend server available"
+    elif path == "staff":
+        healthy_server = fetch_healthy_server(updated_server_obj_list, "/" + path)
+        if healthy_server:
+            response = requests.get("http://%s" % healthy_server.endpoint)
+            return response.content
+        return "No Healthy Backend server available"
     return "Not Found", 404
 
 

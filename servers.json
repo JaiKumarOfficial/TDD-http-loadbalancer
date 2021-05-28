@@ -1,0 +1,38 @@
+{
+    "hosts": [
+        {
+            "host": "www.dal.ca",
+            "servers": [
+                "localhost:8081",
+                "localhost:8082",
+                "localhost:8083"
+            ]
+        },
+        {
+            "host": "www.apple.ca",
+            "servers": [
+                "localhost:7071",
+                "localhost:7072",
+                "localhost:7073"
+            ]
+        }
+    ],
+    "paths": [
+        {
+            "path": "/staff",
+            "servers": [
+                "localhost:7071",
+                "localhost:7072",
+                "localhost:7073"
+            ]
+        },
+        {
+            "path": "/student",
+            "servers": [
+                "localhost:8081",
+                "localhost:8082",
+                "localhost:8083"
+            ]
+        }
+    ]
+}
